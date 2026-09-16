@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Type ─────────────────────────────────────────── */
+  --font-display: "Fraunces", ui-serif, serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* ── Palette: dossier ink / kraft paper / seal gold ── */
+  --color-ink-950: #182234; /* ledger navy — dark sections & ink */
+  --color-ink-900: #1f2c42;
+  --color-ink-800: #293a56;
+  --color-ink-700: #384e70;
+  --color-ink-600: #506d92;
+
+  --color-paper: #f1e9d6; /* kraft dossier paper */
+  --color-paper-dim: #e6d9ba;
+  --color-card-light: #faf5e8;
+
+  --color-accent: #e3a542; /* seal gold — the approval stamp */
+  --color-accent-bright: #f0be5e; /* on dark */
+  --color-accent-deep: #9c6c19; /* legible ochre on light */
+
+  --color-mut-dark: #9fb0c9; /* slate body text on dark */
+  --color-mut-light: #675d44; /* kraft-brown body text on light */
+
+  --color-line-dark: rgba(241, 233, 214, 0.14);
+  --color-line-light: rgba(24, 34, 52, 0.16);
+
+  /* ── Motion ───────────────────────────────────────── */
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-marquee: marquee 30s linear infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-11px);
+    }
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+/* ── Base ───────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink-950 font-body text-paper antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink-950);
+}
+
+/* Consistent, high-visibility keyboard focus across the whole site */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+/* Keeps the outline legible on the gold contact section */
+.bg-accent :focus-visible {
+  outline-color: var(--color-ink-950);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Reusable component classes ─────────────────────── */
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-[76rem] px-5 sm:px-8;
+  }
+  /* Highlighter marker swipe — flat gold, ink text */
+  .mark-lime {
+    background: var(--color-accent);
+    color: var(--color-ink-950);
+    padding: 0.02em 0.18em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  /* Editorial placeholder — clearly marked editable values */
+  .ph {
+    @apply border-b border-dashed border-accent/70 text-accent;
+  }
+  .ph-dark {
+    @apply border-b border-dashed border-accent-deep/60 text-accent-deep;
+  }
+  /* Subtle blueprint grid */
+  .bg-grid-dark {
+    background-image: linear-gradient(rgba(242, 243, 236, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(242, 243, 236, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .bg-grid-light {
+    background-image: linear-gradient(rgba(12, 18, 14, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(12, 18, 14, 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  /* Film-grain texture */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+  /* Hard-offset "carbon copy" shadows */
+  .sticker-paper {
+    border: 1.5px solid rgba(241, 233, 214, 0.92);
+    box-shadow: 9px 10px 0 0 rgba(14, 20, 30, 0.65);
+  }
+  .sticker-dark {
+    border: 1.5px solid rgba(10, 14, 22, 0.9);
+    box-shadow: 6px 6px 0 0 rgba(14, 20, 30, 0.55);
+  }
+  .sticker-soft {
+    border: 1.5px solid var(--color-ink-950);
+    box-shadow: 8px 8px 0 0 rgba(24, 34, 52, 0.12);
+  }
+  .sticker-ghost {
+    box-shadow: 6px 6px 0 0 rgba(14, 20, 30, 0.5);
+  }
+}
+
+/* ── Accessibility: honor reduced motion ────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
